@@ -1,30 +1,12 @@
-;***********************************************************************************
-;*                            Stepper Motor Control v1.5                           *
-;*                             PIC16F84A & ULN2003                                 *
-;*                                                                                 *
-;*                         Jugurtha Hadjar & Raouf Moualdi.                        * 
-;*                 4ème Année Ingénieur Instrumentation U.S.T.H.B                  *
-;*                                                                                 *
-;*          Université des Sciences et de la Technologie Houari Boumédiène.        *
-;*                                                                                 *
-;*               Contact: Remove capital letters from the address.                 *
-;*              REMOVEMEjugurtha.haSPAMdjarSPAM@REMOVEMEhotmail.com                *
-;*                             http://docs.com/@jhadjar                            *
-;***********************************************************************************
 
 ;***********************************************************************************
 ;* Description:                                                                    *
 ;* TEC 585 Project00: Stepper Motor Control using PIC1684A                         *
 ;* A ULN2003 (7 Darlington Array) is used as an interface.                         *
 ;* Two push-buttons to make the motor rotate to the LEFT or to the RIGHT.          *
-;*                                                                                 *
-;* Original code provided courtesy of my teacher, and put as a comment for memo    *
-;* at the end of this file, to keep track of modifications.                        *
-;* It contains errors intentionally slipped by the teacher to stimulate learning.  *
-;*                                                                                 *
 ;***********************************************************************************
 
-
+; 2011
 
 
 
@@ -39,9 +21,9 @@ LIST p=16F84A              ;Which processor ?
 __CONFIG _CP_OFF & _WDT_OFF & _PWRTE_ON & _RC_OSC       
     
 	;Code Protection OFF
-														;Watchdog Timer  OFF
-														;Power Up Timer  ON
-        													;RC Oscillator.
+	;Watchdog Timer  OFF
+	;Power Up Timer  ON
+        ;RC Oscillator.
         
 	;__CONFIG H'3FF9'
 
@@ -71,7 +53,8 @@ STEP   EQU 0x0C      ; See 2-2 Memory Organization (Datasheet 16F84A)
 ;*********************
 
 
-;**********************************************************************************               ;* TRISB is in the 7th location in Bank1, hence setting RP0 to 1 to access it.    *
+;**********************************************************************************               
+;* TRISB is in the 7th location in Bank1, hence setting RP0 to 1 to access it.    *
 ;* TRISB is the PORTB data direction register. It's on 8 bits.                    *
 ;* Clearing TRISB configures the PORTB as an OUTPUT.(Bits can be set/cleared      *
 ;* individually to configure each I/O port separately. RB0,RB1,...,RB7            *
@@ -90,11 +73,11 @@ STEP   EQU 0x0C      ; See 2-2 Memory Organization (Datasheet 16F84A)
 ;* Bit2-0:PRESCALER Select Bits (110, 1:128)                                              *
 ;******************************************************************************************
 
-				cblock 0x0C           
-		                  
-	  				STEP:1         ; The byte at 0x0C:STEP.
-                     
-    			endc
+	cblock 0x0C           
+	                  
+	STEP:1         ; The byte at 0x0C:STEP.
+                  
+	endc
      
 	
 		org 0x00              ;Reset Vector.
@@ -296,78 +279,3 @@ end
 ;* We chose the Bank1 by setting it to 1. *
 ;* And chose Bank0 by setting RP0 to 0  . *
 ;******************************************
-
-
-
-
-
-
-
-
-
-
-
-;*****************************************************************************
-;*                          ORIGINAL CODE                                    *
-;*****************************************************************************
-
-;LIST p=16F84A
-
-;#include p16F84A.inc
-;;_CONFIG H'3FF9'
-;__CONFIG _CP_OFF & _WDT_OFF & _PWRTE_ON & _RC_OSC
-
-;Pas EQU 0x0C
-
-;	org 0x00
-;	bsf STATUS, RP0
-;	clrf TRISB
-
-
-;    movlw B'11111111'
-;	 movwf TRISA
-;		movlw B'10010110'
-;		movwf OPTION_REG
-;	bcf STATUS,RP0
-;	clrf PORTB
-;		clrf Pas
-;		clrf TMR0
-;		goto Debut
-
-;Table	addwf PCL,f
-;			    retlw B'00001001'
-;			    retlw B'00001010'
-;			    retlw B'00000110'
-;               retlw B'00000101'
-
-;Debut	btfss   TMR0,7
-;				goto Debut
-;				clrf TMR0
-
-;Droite	btfsc	PORTA,0
-;		goto 	Gauche
-;		incf	Pas,f
-;		movlw	0x04
-;		subwf	Pas,w
-;		btfsc	STATUS,C
-;		clrf	Pas
-;		movf	Pas,w
-;		call	Table
-;		movwf	PORTB
-;		goto	Debut
-
-;Gauche	btfsc	PORTA,1
-;		goto 	Debut
-;		decf	Pas,f
-;		movlw	0x03
-;		btfsc	Pas,7
-;		movwf	Pas
-;		movf	Pas,w
-;		call	Table
-;		movwf	PORTB
-;		goto	Debut
-;end
-;****************************************************************************
-
-
-

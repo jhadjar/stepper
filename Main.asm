@@ -16,7 +16,6 @@
 
 LIST p=16F84A              ;Which processor ?                                             
 #include "p16F84A.inc"	   ;Where's the file?                                             
-                                        												  
 
 __CONFIG _CP_OFF & _WDT_OFF & _PWRTE_ON & _RC_OSC       
     
@@ -74,32 +73,27 @@ STEP   EQU 0x0C      ; See 2-2 Memory Organization (Datasheet 16F84A)
 ;******************************************************************************************
 
 	cblock 0x0C           
-	                  
 	STEP:1         ; The byte at 0x0C:STEP.
-                  
 	endc
-     
-	
-		org 0x00              ;Reset Vector.
 
-	    goto ENTRYPOINT
+	org 0x00              ;Reset Vector.
 
-        org 0x04
-        ;Supposed to write something here,
-        ;Maybe poetry. 
+	goto ENTRYPOINT
+
+	org 0x04
+	;Supposed to write something here,
+	;Maybe poetry. 
 
 ENTRYPOINT
     
-    ;mSelectBank1             ;Select Bank 1, Duh :)
-    banksel TRISB                         ;That's why I gave meaningful names in the first place :)
+	;mSelectBank1		;Select Bank 1, Duh :)
+	banksel TRISB		;That's why I gave meaningful names in the first place :)
     	
-    movlw 0x0                ; Load W with 0x00 
-    movwf TRISB              ; All bits to 0. (TRISB=00000000)
-                             
-                    
+    movlw 0x			; Load W with 0x00 
+    movwf TRIS			; All bits to 0. (TRISB=00000000)
     banksel TRISA
     
-    movlw 0xFF               ; Load W with 0xFF. 
+	movlw 0xFF               ; Load W with 0xFF. 
 	movwf TRISA              ; All bits to 1. (TRISA=11111111)  
                               
     movlw 0x96               
